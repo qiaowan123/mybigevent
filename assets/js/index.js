@@ -1,5 +1,16 @@
 $(function() {
-    getUserInfo ()
+    getUserInfo ();
+    // 实现点击退出功能
+    $('#btnLogout').on('click',function() {
+        layer.confirm('确定退出登录', {icon: 3, title:'提示'}, function(index){
+            //do something
+            localStorage.removeItem('token')
+            location.href = '/login.html'
+            // 关闭confirm询问框
+            layer.close(index);
+          })
+    })
+        
 
 })
 // 获取用户信息
@@ -7,9 +18,9 @@ function getUserInfo () {
     $.ajax({
         method:'get',
         url:'/my/userinfo',
-        headers: {
-            Authorization:localStorage.getItem('token') || ''
-        },
+        // headers: {
+        //     Authorization:localStorage.getItem('token') || ''
+        // },
         success:function(res) {
             console.log(res);
             if (res.status !== 0) {
@@ -20,6 +31,14 @@ function getUserInfo () {
 
 
         }
+        // complete: function (res) {
+        //     // console.log(res);
+        //     // if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！') {
+        //     //     localStorage.removeItem('token');
+        //     //     location.href = '/login.html';
+
+        //     // }
+        // }
 
     })
 
@@ -40,6 +59,7 @@ function renderAvatar (user) {
     }else {
         // 为空的话就隐藏图片头像 渲染文本头像
         $('.layui-nav-img').hide();
+        // name是字符串  可以当数组用 name的第一个字母
         var first = name[0].toUpperCase();
         $('.text-avatar').html(first).show();
     }
